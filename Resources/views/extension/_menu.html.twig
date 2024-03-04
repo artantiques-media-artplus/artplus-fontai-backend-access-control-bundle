@@ -1,0 +1,83 @@
+{%- set isHomepage = app.request.attributes.get('_route') == 'app_backend_index' %}
+{%- set activeModule = app.request.attributes.get('currentModule') %}
+
+<div class="scroll-sidebar">
+  <nav class="sidebar-nav">
+    <ul id="sidebarnav">
+
+{%- for categoryId, categoryData in categoryTree %}
+
+      <li>
+
+  {%- if categoryData[0].getIsDefault and categoryData[1]|length == 0 %}
+
+        <a class="waves-effect{% if activeCategoryId == categoryId %} active{% endif %}" href="{{ path('app_backend_index') }}">
+          <i class="menu-icon icon-category icon-category-1"></i>
+          <span class="hide-menu">
+            {% trans %}Info panel{% endtrans %}
+          </span>
+        </a>
+
+  {%- else %}
+
+        <a class="waves-effect{% if activeCategoryId == categoryId %} active{% endif %}">
+          <i class="menu-icon icon-category icon-category-{{ categoryId }}"></i>
+          <span class="hide-menu"> {{ categoryData[0].getName }}</span>
+        </a>
+
+  {%- endif %}
+
+  {%- if categoryData[1]|length > 0 %}
+
+        <ul aria-expanded="false" class="collapse">
+
+    {%- if categoryData[0].getIsDefault and app.user.getInfopanel %}
+
+          <li>
+            <a href="{{ path('app_backend_index') }}"{% if isHomepage %} class="active"{% endif %}>
+              {% trans %}Home{% endtrans %}
+            </a>
+          </li>
+
+    {%- endif %}
+
+    {%- for module in categoryData[1] %}
+
+          <li data-moduleId="{{ module.getId }}">
+            <a href="{{ path(module.getRouteNamePrefix ~ '_index', {'page': 1}) }}"{% if activeModule == module %} class="active"{% endif %}>
+              {{ module.getTitle }}
+            </a>
+
+      {%- if moduleTree[module.getId] is defined %}
+
+            <ul>
+
+        {%- for module2 in moduleTree[module.getId] %}
+        
+              <li data-moduleId="{{ module2.getId }}">
+                <a href="{{ path(module2.getRouteNamePrefix ~ '_index', {'page': 1}) }}"{% if activeModule == module2 %} class="active"{% endif %}>
+                  {{ module2.getTitle }}
+                </a>
+              </li>
+
+        {%- endfor %}
+
+            </ul>
+
+      {%- endif %}
+
+          </li>
+
+    {%- endfor %}
+
+        </ul>
+
+  {%- endif %}
+
+      </li>
+
+{%- endfor %}
+
+    </ul>
+  </nav>
+</div>

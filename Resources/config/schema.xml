@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" identifierQuoting="true" namespace="App\Model" package="src.Model">
+  <vendor type="mysql">
+    <parameter name="Engine" value="InnoDB" />
+  </vendor>
+  <behavior name="diff" />
+  <behavior name="event_dispatcher" />
+  <behavior name="was_column_modified" />
+  <behavior name="parent_to_string" />
+  <table name="admin" baseClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BaseAdmin" baseQueryClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BaseAdminQuery">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="first_name" type="varchar" size="100" required="true" />
+    <column name="last_name" type="varchar" size="100" required="true" />
+    <column name="email" type="varchar" size="255" required="true" primaryString="true" />
+    <column name="password" type="varchar" size="255" />
+    <column name="is_active" type="boolean" size="1" required="true" defaultValue="true" />
+    <column name="init" type="boolean" size="1" required="true" defaultValue="false" />
+    <column name="init_hash" type="varchar" size="40" required="true" />
+    <column name="init_url" type="varchar" size="255" required="true" />
+    <column name="recovery_hash" type="varchar" size="40" />
+    <column name="recovery_hash_created_at" type="timestamp" />
+    <column name="last_login_at" type="timestamp" />
+    <column name="login_count" type="integer" required="true" defaultValue="0" />
+    <column name="last_activity_at" type="timestamp" />
+    <column name="smart_menu" type="boolean" size="1" required="true" defaultValue="false" />
+    <column name="smart_header" type="boolean" size="1" required="true" defaultValue="false" />
+    <column name="per_page" type="integer" />
+    <column name="last_project_id" type="integer" />
+    <behavior name="timestampable" />
+    <foreign-key foreignTable="project" name="admin_FK_1" phpName="LastProject" refPhpName="LastAdmin" onDelete="set null" onUpdate="cascade">
+      <reference local="last_project_id" foreign="id" />
+    </foreign-key>
+    <unique name="unique_email">
+      <unique-column name="email" />
+    </unique>
+    <unique name="unique_init_hash">
+      <unique-column name="init_hash" />
+    </unique>
+    <unique name="unique_recovery_hash">
+      <unique-column name="recovery_hash" />
+    </unique>
+    <unique name="unique_last_name_first_name">
+      <unique-column name="last_name" />
+      <unique-column name="first_name" />
+    </unique>
+  </table>
+  <table name="admin_login_attempt">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="admin_id" type="integer" required="true" />
+    <column name="ip" type="varchar" size="15" required="true" />
+    <behavior name="timestampable">
+      <parameter name="disable_updated_at" value="true" />
+    </behavior>
+    <foreign-key foreignTable="admin" name="admin_login_attempt_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="admin_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="permission_group" baseQueryClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionGroupQuery">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="50" required="true" primaryString="true" />
+    <column name="infopanel" type="boolean" size="1" required="true" defaultValue="true" />
+    <unique name="unique_name">
+      <unique-column name="name" />
+    </unique>
+  </table>
+  <table name="permission_module" baseClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionModule" baseQueryClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionModuleQuery">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="100" required="true" />
+    <column name="title" type="varchar" size="50" required="true" primaryString="true" />
+    <column name="permission_module_category_id" type="integer" required="true" />
+    <column name="permission_module_id" type="integer" />
+    <column name="priority" type="integer" required="true" defaultValue="0" />
+    <foreign-key foreignTable="permission_module_category" name="permission_module_FK_1" onUpdate="cascade">
+      <reference local="permission_module_category_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="permission_module" name="permission_module_FK_2" onDelete="set null" onUpdate="cascade">
+      <reference local="permission_module_id" foreign="id" />
+    </foreign-key>
+    <unique name="unique_name">
+      <unique-column name="name" />
+    </unique>
+    <behavior name="i18n">
+      <parameter name="i18n_columns" value="title" />
+      <parameter name="locale_column" value="culture" />
+      <parameter name="default_locale" value="cs" />
+    </behavior>
+  </table>
+  <table name="permission_module_category" baseClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionModuleCategory" baseQueryClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionModuleCategoryQuery">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="50" required="true" primaryString="true" />
+    <column name="priority" type="integer" required="true" defaultValue="0" />
+    <column name="is_default" type="boolean" size="1" required="true" defaultValue="false" />
+    <behavior name="i18n">
+      <parameter name="i18n_columns" value="name" />
+      <parameter name="locale_column" value="culture" />
+      <parameter name="default_locale" value="cs" />
+    </behavior>
+  </table>
+  <table name="permission_action" baseClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionAction" baseQueryClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionActionQuery">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="50" required="true" />
+    <column name="title" type="varchar" size="50" required="true" primaryString="true" />
+    <unique name="unique_name">
+      <unique-column name="name" />
+    </unique>
+    <behavior name="i18n">
+      <parameter name="i18n_columns" value="title" />
+      <parameter name="locale_column" value="culture" />
+      <parameter name="default_locale" value="cs" />
+    </behavior>
+  </table>
+  <table name="project" baseQueryClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BaseProjectQuery">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="100" required="true" primaryString="true" />
+    <column name="priority" type="integer" required="true" defaultValue="0" />
+    <column name="fcc_id" type="integer" required="true" />
+    <column name="fcc_key" type="varchar" size="50" required="true" />
+    <column name="fcc_pass" type="varchar" size="50" required="true" />
+    <unique name="unique_name">
+      <unique-column name="name" />
+    </unique>
+  </table>
+  <table name="admin_permission_group" isCrossRef="true" baseClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BaseAdminPermissionGroup">
+    <column name="admin_id" type="integer" required="true" primaryKey="true" />
+    <column name="permission_group_id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="admin" name="admin_permission_group_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="admin_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="permission_group" name="admin_permission_group_FK_2" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_group_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="admin_permission_module_action" isCrossRef="true">
+    <column name="admin_id" type="integer" required="true" primaryKey="true" />
+    <column name="permission_module_action_id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="admin" name="admin_permission_module_action_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="admin_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="permission_module_action" name="admin_permission_module_action_FK_2" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_module_action_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="admin_project" isCrossRef="true">
+    <column name="admin_id" type="integer" required="true" primaryKey="true" />
+    <column name="project_id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="admin" name="admin_project_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="admin_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="project" name="admin_project_FK_2" onDelete="cascade" onUpdate="cascade">
+      <reference local="project_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="permission_module_action" isCrossRef="true" baseClass="\Fontai\Bundle\BackendAccessControlBundle\Model\BasePermissionModuleAction">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="permission_module_id" type="integer" required="true" />
+    <column name="permission_action_id" type="integer" required="true" />
+    <foreign-key foreignTable="permission_module" name="permission_module_action_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_module_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="permission_action" name="permission_module_action_FK_2" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_action_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="permission_module_priority" isCrossRef="true">
+    <column name="admin_id" type="integer" required="true" primaryKey="true" />
+    <column name="permission_module_id" type="integer" required="true" primaryKey="true" />
+    <column name="priority" type="integer" required="true" defaultValue="0" />
+    <foreign-key foreignTable="admin" name="permission_module_priority_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="admin_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="permission_module" name="permission_module_priority_FK_3" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_module_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="permission_module_project" isCrossRef="true">
+    <column name="permission_module_id" type="integer" required="true" primaryKey="true" />
+    <column name="project_id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="permission_module" name="permission_module_project_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_module_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="project" name="permission_module_project_FK_2" onDelete="cascade" onUpdate="cascade">
+      <reference local="project_id" foreign="id" />
+    </foreign-key>
+  </table>
+  <table name="permission_group_permission_module_action" isCrossRef="true">
+    <column name="permission_group_id" type="integer" required="true" primaryKey="true" />
+    <column name="permission_module_action_id" type="integer" required="true" primaryKey="true" />
+    <foreign-key foreignTable="permission_group" name="permission_group_permission_module_action_FK_1" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_group_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="permission_module_action" name="permission_group_permission_module_action_FK_2" onDelete="cascade" onUpdate="cascade">
+      <reference local="permission_module_action_id" foreign="id" />
+    </foreign-key>
+  </table>
+</database>

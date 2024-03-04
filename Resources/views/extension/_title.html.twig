@@ -1,0 +1,49 @@
+{% set isHomepage = app.request.attributes.get('_route') == 'app_backend_index' %}
+{% set activeModule = app.request.attributes.get('currentModule') %}
+
+<span>
+
+{%- for categoryId, categoryData in categoryTree %}
+    {%- if categoryData[0].getIsDefault and categoryData[1]|length == 0 %}
+        {% if activeCategoryId == categoryId %}
+            {% trans %}Info panel{% endtrans %}
+        {%- endif %}
+    {%- else %}
+        {% if activeCategoryId == categoryId %}
+            {%- if categoryData[1]|length > 0 %}<span class="gray">{%- endif %}
+            {{ categoryData[0].getName }}
+            {%- if categoryData[1]|length > 0 %}</span>{%- endif %}
+        {%- endif %}
+    {%- endif %}
+    {%- if categoryData[1]|length > 0 %}
+        {%- if categoryData[0].getIsDefault and app.user.getInfopanel %}
+            {% if isHomepage %}{% trans %}Home{% endtrans %}{% endif %}
+        {%- endif %}
+
+        {%- for module in categoryData[1] %}
+            {% if activeModule == module %}
+                &nbsp;/&nbsp;
+                {%- if moduleTree[module.getId] is defined %}<span class="gray">{% endif %}
+                {{ module.getTitle }}
+                {%- if moduleTree[module.getId] is defined %}</span>{% endif %}
+            {% endif %}
+
+            {%- if moduleTree[module.getId] is defined %}
+                {% if activeModule == module %}
+                    &nbsp;/&nbsp;{{ module.getTitle }}
+                {% endif %}
+                {% if activeModule is not null and activeModule.getPermissionModuleRelatedByPermissionModuleId == module %}
+                    &nbsp;/&nbsp;
+                    <span class="gray">{{ module.getTitle }}</span>
+                {% endif %}
+                {%- for module2 in moduleTree[module.getId] %}
+                    {% if activeModule == module2 %}
+                        &nbsp;/&nbsp;{{ module2.getTitle }}
+                    {% endif %}
+                {%- endfor %}
+            {%- endif %}
+        {%- endfor %}
+    {%- endif %}
+{%- endfor %}
+
+</span>

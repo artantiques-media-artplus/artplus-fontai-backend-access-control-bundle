@@ -1,0 +1,119 @@
+{% extends app.request.attributes.get('is_master_request') ? '@FontaiGenerator/wrapper.html.twig' : '@FontaiGenerator/standalone.html.twig' %}
+{%- form_theme edit_form '@FontaiGenerator/form/fields.html.twig' %}
+
+{% block title %}{% trans %}Nastavení účtu{% endtrans %} | {{ parent() }}{% endblock %}
+
+{% block content %}
+    {%- include '@FontaiGenerator/_messages.html.twig' %}
+
+<div class="card">
+  <ul class="nav nav-tabs fontai-tabs" role="tablist">
+    <li class="nav-item">
+      <a data-toggle="tab" role="tab" class="nav-link active">
+        <span class="nav-item-icon">
+          <svg class="icon icon-edit">
+            <use xlink:href="#icon-edit"></use>
+          </svg>
+        </span>
+        <span>{% trans %}Nastavení účtu{% endtrans %}</span>
+      </a>
+    </li>
+  </ul>
+  <div class="card-body">
+    {{ form_start(edit_form, {attr: {class: 'form-horizontal ajaxForm edit', id: 'admin_form'}}) }}
+      {{ form_widget(edit_form._token) }}
+      <div class="tab-content">
+        <div class="tab-pane active" role="tabpanel">
+          <fieldset>
+            <div class="form-row">
+              <div class="form-group col-6 col-sm-4">
+                {{ form_label(edit_form.first_name) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.first_name) }}
+                </div>
+              </div>
+              <div class="form-group col-6 col-sm-4">
+                {{ form_label(edit_form.last_name) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.last_name) }}
+                </div>
+              </div>
+              <div class="w-100"></div>
+              <div class="form-group col-6 col-sm-4">
+                {{ form_label(edit_form.email) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.email) }}
+                </div>
+              </div>
+              <div class="form-group col-2">
+                {{ form_label(edit_form.smart_menu) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.smart_menu) }}
+                </div>
+              </div>
+              <div class="form-group col-2">
+                {{ form_label(edit_form.smart_header) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.smart_header) }}
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="form-row">
+
+  {%- if edit_form.offsetExists('password_old') %}
+
+              <div class="form-group col-6 col-sm-4">
+                {{ form_label(edit_form.password_old) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.password_old) }}
+                </div>
+              </div>
+              <div class="w-100"></div>
+  
+  {%- endif %}
+
+              <div class="form-group col-6 col-sm-4">
+                {{ form_label(edit_form.password.first) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.password.first) }}
+                </div>
+              </div>
+              <div class="form-group col-6 col-sm-4">
+                {{ form_label(edit_form.password.second) }}
+                <div class="input-group mb-3">
+                  {{ form_widget(edit_form.password.second) }}
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="form-actions">
+        <div>
+          <button class="btn btn-primary btn-with-icon" type="button" name="back" onclick="window.history.back(); return false;">
+            <span class="btn-with-icon-icon">
+              <svg class="icon icon-action-back">
+                <use xlink:href="#icon-action-back"></use>
+              </svg>
+            </span>
+            <strong class="btn-with-icon-text">{% trans %}Zpět{% endtrans %}</strong>
+          </button>
+        </div>
+        <div>
+          <button class="btn btn-success btn-with-icon" type="submit" name="save">
+            <span class="btn-with-icon-icon">
+              <svg class="icon icon-action-save">
+                <use xlink:href="#icon-action-save"></use>
+              </svg>
+            </span>
+            <strong class="btn-with-icon-text">{% trans %}Uložit{% endtrans %}</strong>
+          </button>
+        </div>
+      </div>
+    {{ form_end(edit_form, {render_rest: false}) }}
+  </div>
+</div>
+
+{% endblock content %}

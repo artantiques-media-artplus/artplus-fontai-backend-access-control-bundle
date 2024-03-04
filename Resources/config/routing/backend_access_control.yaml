@@ -1,0 +1,12 @@
+backend_access_control_default_account:
+    path:       /account
+    controller: Fontai\Bundle\BackendAccessControlBundle\Controller\DefaultController::account
+
+backend_access_control_default_menuSort:
+    path:       /menuSort
+    controller: Fontai\Bundle\BackendAccessControlBundle\Controller\DefaultController::menuSort
+    methods:    [POST]
+
+backend_access_control_default_changeProject:
+    path:       /changeProject
+    controller: Fontai\Bundle\BackendAccessControlBundle\Controller\DefaultController::changeProject

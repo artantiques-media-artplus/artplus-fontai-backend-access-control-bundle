@@ -1,0 +1,27 @@
+{
+    "name": "fontai/backend-access-control-bundle",
+    "type": "symfony-bundle",
+    "description": "Fontai BackendAccessControlBundle",
+    "authors": [
+        {
+            "name": "Lumír Toman",
+            "email": "toman@websource.cz"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "fontai/fcc-bundle": "*",
+        "fontai/propel2-diff-behavior": "*",
+        "fontai/propel2-eventdispatcher-behavior": "*",
+        "fontai/propel2-parenttostring-behavior": "*",
+        "fontai/security-bundle": "*",
+        "propel/propel-bundle": "~4.0@dev"
+    },
+    "autoload": {
+        "psr-4": { "Fontai\\Bundle\\BackendAccessControlBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev"
+}

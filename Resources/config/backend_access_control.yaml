@@ -1,0 +1,33 @@
+services:
+    _defaults:
+        public: false
+        autowire: true
+
+    Fontai\Bundle\BackendAccessControlBundle\Controller\DefaultController:
+        tags: ['controller.service_arguments']
+        arguments:
+            - '@translator'
+
+    Fontai\Bundle\BackendAccessControlBundle\EventSubscriber\BackendAccessControlSubscriber:
+        arguments:
+            - '@request_stack'
+            - '@fcc.service'
+
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Fontai\Bundle\BackendAccessControlBundle\Twig\BackendAccessControlExtension:
+        arguments:
+            - '@form.factory'
+            - '@request_stack'
+            - '@router'
+            - '@session'
+            - '@security.token_storage'
+        tags:
+            - { name: twig.extension }
+
+    Fontai\Bundle\BackendAccessControlBundle\Command\GenerateConfigCommand:
+        tags:
+            - { name: console.command, command: backend-access-control:generate-config }
+        arguments:
+            - '%kernel.project_dir%'

@@ -1,0 +1,17 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <svg class="profile-pic"><use xlink:href="#icon-user"></use></svg>
+  </a>
+  <div class="dropdown-menu dropdown-menu-right">
+    <div class="fontai-user-dropdown">
+      <div class="fontai-user-dropdown-name">{{ app.user.getFirstName }} {{ app.user.getLastName }}</div>
+      <div class="fontai-user-dropdown-email">{{ app.user.getEmail }}</div>
+      <div class="fontai-user-dropdown-item">
+        <a href="{{ path('backend_access_control_default_account') }}"><span><svg class="icon-settings"><use xlink:href="#icon-settings"></use></svg></span><strong>{% trans %}Nastavení{% endtrans %}</strong></a>
+      </div>
+      <div class="fontai-user-dropdown-item">
+        <a href="{{ path('app_backend_security_logout') }}"><span><svg class="icon-logout"><use xlink:href="#icon-logout"></use></svg></span><strong>{% trans %}Odhlásit{% endtrans %}</strong></a>
+      </div>
+    </div>
+  </div>
+</li>
