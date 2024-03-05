@@ -15,7 +15,7 @@
         "fontai/propel2-eventdispatcher-behavior": "*",
         "fontai/propel2-parenttostring-behavior": "*",
         "fontai/security-bundle": "*",
-        "propel/propel-bundle": "~4.0@dev"
+        "propel/propel-bundle": "dev-master"
     },
     "autoload": {
         "psr-4": { "Fontai\\Bundle\\BackendAccessControlBundle\\": "" },
